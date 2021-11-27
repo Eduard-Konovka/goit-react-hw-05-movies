@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/components/Cast/Cast.module.css"],"names":[],"mappings":"AAAA,kBACE,kBACF,CAEA,mBACE,WACF","file":"Cast.aea14655.chunk.css","sourcesContent":[".item {\n  margin-bottom: 80px;\n}\n\n.photo {\n  width: 150px;\n}\n"]}
