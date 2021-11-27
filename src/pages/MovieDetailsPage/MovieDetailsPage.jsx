@@ -1,8 +1,17 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { useParams, Routes, Route, Link } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Link,
+  useParams,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import { ImArrowLeft } from 'react-icons/im';
 import { movieApiService } from '../../services/api-service';
 import URL from '../../services/settings-url';
 import Loading from '../../components/Loading/Loading';
+import Button from 'components/Button/Button';
 import s from './MovieDetailsPage.module.css';
 
 const Cast = lazy(() =>
@@ -15,6 +24,8 @@ const Reviews = lazy(() =>
 );
 
 export default function MovieDetailsPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
 
@@ -22,10 +33,18 @@ export default function MovieDetailsPage() {
     movieApiService.fetchArticles(null, movieId).then(setMovie);
   }, [movieId]);
 
+  const onGoBack = () => {
+    navigate(location?.state?.from?.pathname ?? '/');
+  };
+
   return (
     <>
       {movie && (
         <>
+          <Button type="button" forClick={onGoBack}>
+            <ImArrowLeft style={{ marginRight: 8, marginBottom: -2 }} />
+            {location?.state?.from?.label ?? 'Go Back'}
+          </Button>
           <div className={s.box}>
             <img
               src={`${URL.W342_IMG_URL}/${movie.poster_path}`}

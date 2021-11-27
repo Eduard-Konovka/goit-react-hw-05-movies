@@ -1,4 +1,6 @@
-export default function NotFoundView({ errorImage, messadge }) {
+import errorImage from './error.jpg';
+
+export default function NotFoundView({ messadge }) {
   return (
     <div role="alert">
       <img src={errorImage} alt="Error 404" />
