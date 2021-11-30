@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { movieApiService } from 'services/api-service';
-import URL from '../../services/settings-url';
+import URL from 'services/settings-url';
 import s from './Cast.module.css';
 
 export default function Cast() {

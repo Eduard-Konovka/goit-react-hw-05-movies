@@ -8,19 +8,17 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { ImArrowLeft } from 'react-icons/im';
-import { movieApiService } from '../../services/api-service';
-import URL from '../../services/settings-url';
-import Loading from '../../components/Loading/Loading';
+import { movieApiService } from 'services/api-service';
+import URL from 'services/settings-url';
+import Loading from 'components/Loading/Loading';
 import Button from 'components/Button/Button';
 import s from './MovieDetailsPage.module.css';
 
 const Cast = lazy(() =>
-  import('../../components/Cast/Cast.jsx' /* webpackChunkName: "Cast" */),
+  import('components/Cast/Cast.jsx' /* webpackChunkName: "Cast" */),
 );
 const Reviews = lazy(() =>
-  import(
-    '../../components/Reviews/Reviews.jsx' /* webpackChunkName: "Reviews" */
-  ),
+  import('components/Reviews/Reviews.jsx' /* webpackChunkName: "Reviews" */),
 );
 
 export default function MovieDetailsPage() {
@@ -34,7 +32,11 @@ export default function MovieDetailsPage() {
   }, [movieId]);
 
   const onGoBack = () => {
-    navigate(location?.state?.from?.pathname ?? '/');
+    navigate(
+      location.state?.from?.pathname
+        ? `${location.state?.from?.pathname}${location.state?.from?.search}`
+        : '/',
+    );
   };
 
   return (
@@ -43,7 +45,7 @@ export default function MovieDetailsPage() {
         <>
           <Button type="button" forClick={onGoBack}>
             <ImArrowLeft style={{ marginRight: 8, marginBottom: -2 }} />
-            {location?.state?.from?.label ?? 'Go Back'}
+            {location?.state?.label ?? 'Go Back'}
           </Button>
           <div className={s.box}>
             <img
@@ -65,19 +67,35 @@ export default function MovieDetailsPage() {
             <h5>Additional information</h5>
             <ul>
               <li>
-                <Link to={`/movies/${movieId}/cast`}>Cast</Link>
+                <Link
+                  to={`/movies/${movieId}/cast`}
+                  state={{
+                    from: location.state.from,
+                    label: location.state.label,
+                  }}
+                >
+                  Cast
+                </Link>
               </li>
 
               <li>
-                <Link to={`/movies/${movieId}/reviews`}>Reviews</Link>
+                <Link
+                  to={`/movies/${movieId}/reviews`}
+                  state={{
+                    from: location.state.from,
+                    label: location.state.label,
+                  }}
+                >
+                  Reviews
+                </Link>
               </li>
             </ul>
           </div>
 
           <Suspense fallback={<Loading timeout={3000} />}>
             <Routes>
-              <Route path="/cast" element={movie && <Cast />} />
-              <Route path="/reviews" element={movie && <Reviews />} />
+              <Route path="/cast" element={<Cast />} />
+              <Route path="/reviews" element={<Reviews />} />
             </Routes>
           </Suspense>
         </>

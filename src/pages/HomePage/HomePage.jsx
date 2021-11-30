@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { apiService } from '../../services/api-service';
-import PageHeading from '../../components/PageHeading/PageHeading';
+import { apiService } from 'services/api-service';
+import PageHeading from 'components/PageHeading/PageHeading';
 
 export default function HomePage() {
-  const { pathname } = useLocation();
+  const location = useLocation();
   const [movies, setMovies] = useState(null);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function HomePage() {
             <li key={movie.id}>
               <Link
                 to={`movies/${movie.id}`}
-                state={{ from: { pathname, label: 'Go to Home' } }}
+                state={{ from: location, label: 'Go to Home' }}
               >
                 {movie.title}
               </Link>
