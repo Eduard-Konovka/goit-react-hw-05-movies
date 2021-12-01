@@ -8,8 +8,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 import { ImArrowLeft } from 'react-icons/im';
-import { movieApiService } from 'services/api-service';
-import URL from 'services/settings-url';
+import { movieApiService, URL } from 'services/api-service';
 import Loading from 'components/Loading/Loading';
 import Button from 'components/Button/Button';
 import s from './MovieDetailsPage.module.css';
@@ -28,7 +27,7 @@ export default function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    movieApiService.fetchArticles(null, movieId).then(setMovie);
+    movieApiService(null, movieId).then(setMovie);
   }, [movieId]);
 
   const onGoBack = () => {
@@ -48,10 +47,7 @@ export default function MovieDetailsPage() {
             {location?.state?.label ?? 'Go Back'}
           </Button>
           <div className={s.box}>
-            <img
-              src={`${URL.W342_IMG_URL}/${movie.poster_path}`}
-              alt={movie.title}
-            />
+            <img src={`${URL.IMG}/${movie.poster_path}`} alt={movie.title} />
 
             <div className={s.description}>
               <h2>{movie.title}</h2>

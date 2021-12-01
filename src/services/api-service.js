@@ -1,75 +1,45 @@
-import URL from './settings-url';
 const axios = require('axios');
 
-// Запросы на списки популярных фильмов НА СЕГОДНЯ или ПО КЛЮЧЕВОМУ СЛОВУ для создания коллекции на главной странице
-export const apiService = {
-  url: '',
-  PATH_HOME: 'trending/movie',
-  PATH_SEARCH: 'search/movie',
-  params: {
-    api_key: `${URL.KEY}`,
-    page: 1,
-  },
-  params_search: {
-    language: 'en-US',
-    query: '',
-    include_adult: false,
-  },
-
-  async fetchArticles(request) {
-    if (request === 'search') {
-      this.url = `${URL.BASE}/${this.PATH_SEARCH}?${new URLSearchParams(
-        this.params,
-      ).toString()}&${new URLSearchParams(this.params_search).toString()}`;
-    } else {
-      this.url = `${URL.BASE}/${
-        this.PATH_HOME
-      }/${request}?${new URLSearchParams(this.params).toString()}`;
-    }
-
-    const { data } = await axios.get(this.url);
-    return data.results;
-  },
-
-  incrementPage() {
-    this.params.page += 1;
-  },
-
-  resetPage() {
-    this.params.page = 1;
-  },
-
-  get page() {
-    return this.params.page;
-  },
-
-  set page(newPage) {
-    this.params.page = newPage;
-  },
-
-  get searchQuery() {
-    return this.params_search.query;
-  },
-
-  set searchQuery(newQuery) {
-    this.params_search.query = newQuery;
-  },
+export const URL = {
+  BASE: 'https://api.themoviedb.org/3',
+  IMG: 'https://image.tmdb.org/t/p/w342',
+  PATH: 'movie',
+  HOME: 'trending',
+  SEARCH: 'search',
+  KEY: 'd59d4b143292fc56b6769ba48f713e41',
 };
+
+axios.defaults.baseURL = URL.BASE;
+axios.defaults.params = {
+  api_key: URL.KEY,
+};
+
+// Запросы на списки популярных фильмов НА СЕГОДНЯ для создания коллекции на главной странице
+export async function trendingApiService(request) {
+  const { data } = await axios(`${URL.HOME}/${URL.PATH}/${request}`);
+  return data.results;
+}
+
+// Запросы на списки фильмов ПО КЛЮЧЕВОМУ СЛОВУ для создания коллекции на на странице фильмов
+export async function searchApiService(request) {
+  const { data } = await axios(`${URL.SEARCH}/${URL.PATH}`, {
+    params: {
+      language: 'en-US',
+      query: request,
+      include_adult: false,
+    },
+  });
+
+  return data.results;
+}
 
 // Запрос информации О ФИЛЬМЕ, ОБ АКТЁРСКОМ СОСТАВЕ и ОБЗОРОВ для страницы кинофильма
-export const movieApiService = {
-  PATH: `movie`,
-  params: {
-    api_key: `${URL.KEY}`,
-    language: 'en-US',
-  },
+export async function movieApiService(request, id) {
+  const { data } = await axios(`${URL.PATH}/${id}${request}`, {
+    params: {
+      language: 'en-US',
+    },
+  });
 
-  async fetchArticles(request, id) {
-    const url = `${URL.BASE}/${this.PATH}/${id}${request}?${new URLSearchParams(
-      this.params,
-    ).toString()}`;
-
-    const { data } = await axios.get(url);
-    return data;
-  },
-};
+  return data;
+}

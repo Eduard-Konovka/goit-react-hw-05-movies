@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { apiService } from 'services/api-service';
+import { trendingApiService } from 'services/api-service';
 import PageHeading from 'components/PageHeading/PageHeading';
 
 export default function HomePage() {
@@ -8,7 +8,7 @@ export default function HomePage() {
   const [movies, setMovies] = useState(null);
 
   useEffect(() => {
-    apiService.fetchArticles('day').then(setMovies);
+    trendingApiService('day').then(setMovies);
   }, []);
 
   return (

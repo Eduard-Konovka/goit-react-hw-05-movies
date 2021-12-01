@@ -8,9 +8,7 @@ export default function Reviews() {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    movieApiService
-      .fetchArticles('/reviews', movieId)
-      .then(data => setReviews(data.results));
+    movieApiService('/reviews', movieId).then(data => setReviews(data.results));
   }, [movieId]);
 
   if (reviews.length === 0) {

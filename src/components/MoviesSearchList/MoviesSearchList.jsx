@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { apiService } from 'services/api-service';
+import { searchApiService } from 'services/api-service';
 
 export default function MoviesSearchList({ search }) {
   const location = useLocation();
@@ -11,8 +11,7 @@ export default function MoviesSearchList({ search }) {
       return;
     }
 
-    apiService.searchQuery = search;
-    apiService.fetchArticles('search').then(data => setMovies(data));
+    searchApiService(search).then(data => setMovies(data));
   }, [search]);
 
   return (

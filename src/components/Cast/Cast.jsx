@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { movieApiService } from 'services/api-service';
-import URL from 'services/settings-url';
+import { movieApiService, URL } from 'services/api-service';
 import s from './Cast.module.css';
 
 export default function Cast() {
@@ -9,9 +8,7 @@ export default function Cast() {
   const [cast, setCast] = useState([]);
 
   useEffect(() => {
-    movieApiService
-      .fetchArticles('/credits', movieId)
-      .then(data => setCast(data.cast));
+    movieApiService('/credits', movieId).then(data => setCast(data.cast));
   }, [movieId]);
 
   return (
@@ -19,7 +16,7 @@ export default function Cast() {
       {cast.map(actor => (
         <li key={actor.id} className={s.item}>
           <img
-            src={`${URL.W342_IMG_URL}/${actor.profile_path}`}
+            src={`${URL.IMG}/${actor.profile_path}`}
             alt={actor.name}
             className={s.photo}
           />
